@@ -1,18 +1,18 @@
-interface SeedProduct {
+export interface SeedProduct {
     description: string;
     images: string[];
     inStock: number;
     price: number;
-    sizes: ValidSizes[];
+    sizes: ISizes[];
     slug: string;
     tags: string[];
     title: string;
-    type: ValidTypes;
+    type: ITypes;
     gender: 'men'|'women'|'kid'|'unisex'
 }
 
-type ValidSizes = 'XS'|'S'|'M'|'L'|'XL'|'XXL'|'XXXL';
-type ValidTypes = 'shirts'|'pants'|'hoodies'|'hats';
+type ISizes = 'XS'|'S'|'M'|'L'|'XL'|'XXL'|'XXXL';
+type ITypes = 'shirts'|'pants'|'hoodies'|'hats';
 
 interface SeedData {
     products: SeedProduct[],

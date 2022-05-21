@@ -5,7 +5,8 @@ import { lightTheme } from '../themes'
 import { CssBaseline } from '@mui/material'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return (<ThemeProvider theme={lightTheme} >
+  return (
+  <ThemeProvider theme={lightTheme} >
     <CssBaseline/>
     <Component {...pageProps} />
   </ThemeProvider>
