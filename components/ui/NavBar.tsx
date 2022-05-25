@@ -10,8 +10,14 @@ import {
   Badge,
 } from "@mui/material";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
+import { useContext } from "react";
+import { UiContext } from "../../context";
 
 const NavBar = () => {
+  const {toogleSideMenu} = useContext(UiContext)
+ const {asPath} = useRouter();
+
   return (
     <AppBar>
       <Toolbar>
@@ -22,20 +28,32 @@ const NavBar = () => {
           </Link>
         </NextLink>
         <Box flex={1} />
-        <Box sx={{ display:{ xs:'none', sm:'block'} }} >
+        <Box sx={{ display: { xs: "none", sm: "block" } }}>
           <NextLink href="/category/men" passHref>
             <Link>
-              <Button> Men </Button>
+              <Button
+                color={asPath.substring(10) === "men" ? "info" : "primary"}
+              >
+                Men
+              </Button>
             </Link>
           </NextLink>
           <NextLink href="/category/women" passHref>
             <Link>
-              <Button> Women </Button>
+              <Button
+                color={asPath.substring(10) === "women" ? "info" : "primary"}
+              >
+                Women
+              </Button>
             </Link>
           </NextLink>
           <NextLink href="/category/kid" passHref>
             <Link>
-              <Button> Kids </Button>
+              <Button
+                color={asPath.substring(10) === "kid" ? "info" : "primary"}
+              >
+                Kids
+              </Button>
             </Link>
           </NextLink>
         </Box>
@@ -53,7 +71,7 @@ const NavBar = () => {
             </IconButton>
           </Link>
         </NextLink>
-        <Button>Menu</Button>
+        <Button onClick={toogleSideMenu}>Menu</Button>
       </Toolbar>
     </AppBar>
   );

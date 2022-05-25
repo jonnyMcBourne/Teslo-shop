@@ -10,7 +10,6 @@ const ProductList:FC<Props> = ({products}) => {
     <Grid container spacing={4}>
         {
             products.map(product=>(<ProductCard product={product} key={product.slug} />))
-
         }
     </Grid>
   )

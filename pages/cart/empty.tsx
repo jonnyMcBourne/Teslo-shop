@@ -19,7 +19,7 @@ export const EmptyCart = () => {
         <RemoveShoppingCartOutlined sx={{ fontSize: 100 }} />
         <Box display="flex" flexDirection="column" alignItems="center">
           <Typography marginLeft={2}>
-            You Haven't Add any Product to your Cart
+            You have not Added any Product to your Cart
           </Typography>
         <NextLink href="/" passHref>
           <Link typography="h4" color="secondary">
