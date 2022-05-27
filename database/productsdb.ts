@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { db } from ".";
-import { Data } from "../interfaces";
+import { Data, IProduct } from "../interfaces";
 import { Product } from "../models";
 import { SHOP_CONSTANT } from "./constants";
 
@@ -10,19 +10,24 @@ export const getProducts = async (
 ) => {
   const { gender = "all" } = req.query;
   let condition = {};
-  if (gender !== "all" && SHOP_CONSTANT.validGenders.includes(`${gender}`)) {
-    const isValid = (condition = { gender });
+  if(gender !== 'all' && SHOP_CONSTANT.validGenders.includes(`${gender}`)){
+    condition = {gender};
   }
-  console.log("condition", condition);
+
+ 
   try {
     await db.connect();
     const products = await Product.find(condition)
       .select("title images price inStock slug -_id")
       .lean();
     await db.disconnect();
-    res.status(200).json({ count: products.length, products: products });
+    if(!products){
+      return res.status(200).json({ message:'there is not products'});
+    }
+
+    return res.status(200).json( {products} );
   } catch (error) {
-    console.log("Somethig went wrong", error);
+    return console.log("Somethig went wrong", error);
   }
 };
 export const getProductBySlug = async (
@@ -68,3 +73,42 @@ export const searchProducts = async (
     console.log("Error: ",error);
   }
 };
+
+export const getOneProductBySlug=async(slug:string):Promise<IProduct|null>=>{
+  await db.connect()
+  const product = await Product.findOne({slug}).lean()
+  await db.disconnect()
+  if(!product){
+    return null
+  }
+  return JSON.parse(JSON.stringify(product))
+}
+
+interface ProductSlug{
+  slug:string
+}
+export const getAllProductSlugs = async ():Promise<ProductSlug[]>=>{
+  await db.connect();
+  const slug = await Product.find().select('slug -_id').lean()
+  await db.disconnect();
+  return slug
+}
+
+export const getProductsByQuery = async ( query:string ):Promise<IProduct[]|null>=>{
+    await db.connect();
+      const products = await Product.find({ $text: { $search: query } }).lean();
+      await db.disconnect();
+      if(!products){
+        return null
+      }
+      return JSON.parse(JSON.stringify(products)); 
+}
+export const getAllProducts = async ():Promise<IProduct[]|null> =>{
+  await db.connect()
+  const products = await Product.find().lean()
+  await db.disconnect();
+  if(!products){
+    return null
+  }
+  return JSON.parse(JSON.stringify(products)); 
+}

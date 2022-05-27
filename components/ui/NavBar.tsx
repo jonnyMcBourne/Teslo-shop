@@ -1,4 +1,7 @@
-import { SearchOutlined, ShoppingCartOutlined } from "@mui/icons-material";
+import { FC, useContext, useState } from "react";
+import NextLink from "next/link";
+import { ClearOutlined, SearchOutlined, ShoppingCartOutlined } from "@mui/icons-material";
+import { useRouter } from "next/router";
 import {
   AppBar,
   Button,
@@ -8,10 +11,30 @@ import {
   Box,
   IconButton,
   Badge,
+  Input,
+  InputAdornment,
 } from "@mui/material";
-import NextLink from "next/link";
+import { UiContext } from "../../context";
 
-const NavBar = () => {
+export const NavBar:FC<{}> = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isSearchVisible, setIsSearchVisible] = useState(false)
+  const {toogleSideMenu} = useContext(UiContext);
+ const {asPath,push} = useRouter();
+
+  const onCloseSideBar=()=>{toogleSideMenu()}
+    const navigateTo = (url: string) => {
+      push(url);
+    };
+    const onSearchTerm = () => {
+      if (searchTerm.trim().length === 0) return;
+      navigateTo(`/search/${searchTerm}`);
+      setSearchTerm("");
+    };
+    const eraseField = () =>{
+      setIsSearchVisible(!isSearchVisible)
+    }
+  
   return (
     <AppBar>
       <Toolbar>
@@ -22,26 +45,76 @@ const NavBar = () => {
           </Link>
         </NextLink>
         <Box flex={1} />
-        <Box sx={{ display:{ xs:'none', sm:'block'} }} >
+        <Box
+          sx={{
+            display: isSearchVisible ? "none" : { xs: "none", sm: "block" },
+          }}
+        >
           <NextLink href="/category/men" passHref>
             <Link>
-              <Button> Men </Button>
+              <Button
+                color={asPath.substring(10) === "men" ? "info" : "primary"}
+              >
+                Men
+              </Button>
             </Link>
           </NextLink>
           <NextLink href="/category/women" passHref>
             <Link>
-              <Button> Women </Button>
+              <Button
+                color={asPath.substring(10) === "women" ? "info" : "primary"}
+              >
+                Women
+              </Button>
             </Link>
           </NextLink>
           <NextLink href="/category/kid" passHref>
             <Link>
-              <Button> Kids </Button>
+              <Button
+                color={asPath.substring(10) === "kid" ? "info" : "primary"}
+              >
+                Kids
+              </Button>
             </Link>
           </NextLink>
         </Box>
 
         <Box flex={1} />
-        <IconButton>
+        {/**big screens*/}
+        {isSearchVisible ? (
+          <Input
+            className="fadeIn"
+            autoFocus={true}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && onSearchTerm()}
+            type="text"
+            placeholder="find..."
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton onClick={eraseField}>
+                  <ClearOutlined />
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        ) : (
+          <>
+            <IconButton
+              className="fadeIn"
+              sx={{ display: { xs: "none", sm: "flex" } }}
+              onClick={() => setIsSearchVisible(!isSearchVisible)}
+            >
+              <SearchOutlined />
+            </IconButton>
+          </>
+        )}
+
+        {/**small screens */}
+        <IconButton
+          sx={{ display: { xs: "flex", sm: "none" } }}
+          onClick={toogleSideMenu}
+        >
           <SearchOutlined />
         </IconButton>
         <NextLink href="/cart" passHref>
@@ -53,10 +126,12 @@ const NavBar = () => {
             </IconButton>
           </Link>
         </NextLink>
-        <Button>Menu</Button>
+        <Button onClick={() => onCloseSideBar()}>Menu</Button>
       </Toolbar>
     </AppBar>
   );
 };
 
 export default NavBar;
+
+
