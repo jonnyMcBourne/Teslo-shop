@@ -23,20 +23,30 @@ import {
   SearchOutlined,
   VpnKeyOutlined,
 } from "@mui/icons-material";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UiContext } from "../../context";
 import { useRouter } from "next/router";
 
 export const SideMenu = () => {
   const {toogleSideMenu,isMenuOpen} = useContext(UiContext)
-  const {push}=useRouter()
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const {push,replace}=useRouter()
+
   const navigateTo = (url:string)=>{
-    push(url)
+    replace(url)
     toogleSideMenu()
   }
+
+  const onSearchTerm=()=>{
+    if(searchTerm.trim().length === 0)return
+    navigateTo(`/search/${searchTerm}`)
+    setSearchTerm('')
+  }
+
   return (
     <Drawer
-      onClose={toogleSideMenu}
+      onClose={() => toogleSideMenu()}
       open={isMenuOpen}
       anchor="right"
       sx={{ backdropFilter: "blur(4px)", transition: "all 0.5s ease-out" }}
@@ -45,6 +55,10 @@ export const SideMenu = () => {
         <List>
           <ListItem>
             <Input
+              autoFocus={true}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && onSearchTerm()}
               type="text"
               placeholder="Buscar..."
               endAdornment={

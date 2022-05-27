@@ -93,3 +93,22 @@ export const getAllProductSlugs = async ():Promise<ProductSlug[]>=>{
   await db.disconnect();
   return slug
 }
+
+export const getProductsByQuery = async ( query:string ):Promise<IProduct[]|null>=>{
+    await db.connect();
+      const products = await Product.find({ $text: { $search: query } }).lean();
+      await db.disconnect();
+      if(!products){
+        return null
+      }
+      return JSON.parse(JSON.stringify(products)); 
+}
+export const getAllProducts = async ():Promise<IProduct[]|null> =>{
+  await db.connect()
+  const products = await Product.find().lean()
+  await db.disconnect();
+  if(!products){
+    return null
+  }
+  return JSON.parse(JSON.stringify(products)); 
+}
