@@ -12,7 +12,7 @@ yarn dev
 ```
 ### To run the database
 ```
-docker-compose up
+docker-compose up -d
 ```
 ### seed the dabase
 ```
