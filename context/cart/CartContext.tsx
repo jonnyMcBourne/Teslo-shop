@@ -10,11 +10,22 @@ export interface ICartProduct{
     gender: IGender;
     quantity:number
 }
+
+export interface IcartSummary{
+  quantityOfIttems: number;
+  subTotal: number;
+  tax: number;
+  total: number;
+}
 type IGender = 'men'|'women'|'kid'|'unisex'
 export type ISizes = undefined|'XS'|'S'|'M'|'L'|'XL'|'XXL'|'XXXL';
 
 interface ContextProps {
   cart: ICartProduct[];
+  cartSummary:IcartSummary;
+  addProductToCart:(product:ICartProduct)=>void
+  updateCartQuantity:(product:ICartProduct,quantity:number)=>void
+  deleteProductInCart:(product:ICartProduct)=>void
 }
 
 export const CartContext = createContext({} as ContextProps);

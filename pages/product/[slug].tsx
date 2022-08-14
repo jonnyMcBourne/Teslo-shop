@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { GetServerSideProps, GetStaticPaths } from "next";
 import { Box, Button, Chip, Grid, Typography } from "@mui/material";
 import { getAllProductSlugs, getOneProductBySlug } from "../../database";
@@ -12,8 +12,9 @@ import { IProduct } from "../../interfaces";
 interface Props {
   product: IProduct;
 }
-const slug: FC<Props> = ({ product }) => {
+const Slug: FC<Props> = ({ product }) => {
   const [isMaxReached, setIsMaxReached] = useState(false)
+  // this state is to update the product that we are going to add to the cart
   const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
     _id: product._id,
     images: product.images[0],
@@ -25,28 +26,30 @@ const slug: FC<Props> = ({ product }) => {
     quantity: 1,
   });
 
+  const router = useRouter()
+const {addProductToCart,cart}=useContext(CartContext)
+
   const onSelectedSize = (size:ISizes) =>{
       setTempCartProduct(currentProduct=>({...currentProduct,size})); 
   }
 
   const onAddToCart =()=>{
-    console.log("temp", tempCartProduct);
+    addProductToCart(tempCartProduct);
+    router.push('/cart')
   }
   const onAddQuantity = ()=>{
     if(tempCartProduct.quantity >= product.inStock){
-      console.log("max");
       setIsMaxReached(true)
       return
     }
-
     setTempCartProduct(currentItem=>({...currentItem,quantity:currentItem.quantity+1}));
   }
   const onDecreaseQuantity = () =>{
     if(tempCartProduct.quantity <= 1){
-      console.log("min")
       return
     }
     setIsMaxReached(false);
+
     setTempCartProduct((currentItem) => ({
       ...currentItem,
       quantity: currentItem.quantity - 1,
@@ -96,8 +99,8 @@ const slug: FC<Props> = ({ product }) => {
                 className="circular-btn"
                 disabled={tempCartProduct.size ? false : true}
               >
-                {tempCartProduct.size ? "Add to Cart" : "Select a size"}
-              </Button>
+                {tempCartProduct.size ? "Add to Cart" : "Select a Size"}
+              </Button> 
             ) : (
               <Chip
                 label="Product Not Available"
@@ -118,7 +121,7 @@ const slug: FC<Props> = ({ product }) => {
   );
 };
 
-export default slug;
+export default Slug;
 
 // You should use getServerSideProps when:
 // - Only if you need to pre-render a page whose data must be fetched at request time
@@ -162,8 +165,9 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 //- The data can be publicly cached (not user-specific).
 //- The page must be pre-rendered (for SEO) and be very fast — getStaticProps generates HTML and JSON files, both of which can be cached by a CDN for performance.
 import { GetStaticProps } from "next";
-import { ICartProduct, ISizes } from "../../context";
+import { CartContext, ICartProduct, ISizes } from "../../context";
 import { closeSync } from "fs";
+import { useRouter } from "next/router";
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { slug = "" } = params as { slug: string };
@@ -185,3 +189,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     revalidate: 60 * 60 * 24,
   };
 };
+
+
+   
