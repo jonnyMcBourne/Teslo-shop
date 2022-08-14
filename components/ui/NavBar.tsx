@@ -14,13 +14,14 @@ import {
   Input,
   InputAdornment,
 } from "@mui/material";
-import { UiContext } from "../../context";
+import { CartContext, UiContext } from "../../context";
 
 export const NavBar:FC<{}> = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearchVisible, setIsSearchVisible] = useState(false)
   const {toogleSideMenu} = useContext(UiContext);
  const {asPath,push} = useRouter();
+ const {cartSummary}= useContext(CartContext)
 
   const onCloseSideBar=()=>{toogleSideMenu()}
     const navigateTo = (url: string) => {
@@ -120,7 +121,7 @@ export const NavBar:FC<{}> = () => {
         <NextLink href="/cart" passHref>
           <Link>
             <IconButton>
-              <Badge badgeContent={2} color="secondary">
+              <Badge badgeContent={cartSummary.quantityOfIttems > 9 ? '+9': cartSummary.quantityOfIttems} color="secondary">
                 <ShoppingCartOutlined />
               </Badge>
             </IconButton>

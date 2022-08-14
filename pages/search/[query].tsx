@@ -19,7 +19,6 @@ interface Props {
 }
 
 const SearchPage: FC<Props> = ({ products, productsFound, query }) => {
-  console.log("foundproductsfrontend", productsFound);
   return (
     <ShopLayout
       title={"Teslo-Shop search"}
@@ -63,7 +62,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
   let products = await getProductsByQuery(query);
   const productsFound = products?.length !== 0;
-  console.log("foundproducts", productsFound,products);
   if (!productsFound) {
     products = await getAllProducts();
   }
