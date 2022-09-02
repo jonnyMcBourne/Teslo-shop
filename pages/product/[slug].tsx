@@ -166,7 +166,6 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 //- The page must be pre-rendered (for SEO) and be very fast — getStaticProps generates HTML and JSON files, both of which can be cached by a CDN for performance.
 import { GetStaticProps } from "next";
 import { CartContext, ICartProduct, ISizes } from "../../context";
-import { closeSync } from "fs";
 import { useRouter } from "next/router";
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
