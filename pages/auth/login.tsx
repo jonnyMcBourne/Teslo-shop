@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Nextlink from 'next/link';
 import {
   Grid,
@@ -16,6 +16,8 @@ import { useForm } from 'react-hook-form';
 import { validations } from '../../utils';
 import { tesloApi } from '../../api';
 import { ErrorOutline } from '@mui/icons-material';
+import { AuthContext } from '../../context';
+import { useRouter } from 'next/router';
 type formData = { email: string; password: string };
 
 export const LoginPage = () => {
@@ -25,20 +27,19 @@ export const LoginPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<formData>();
+  const { loginUser, user } = useContext(AuthContext)
+  const router = useRouter();
 
   const onLoginUser = async ({ email, password }: formData) => {
     setShowError(false);
-    try {
-      const { data } = await tesloApi.post('/user/login', { email, password });
-      const { token, user } = data;
-      console.log('Token:', token, 'User:', user);
-    } catch (error) {
-      console.log(error);
+
+    const isValidLogin = await loginUser(email, password);
+    if (!isValidLogin) {
       setShowError(true);
-      setTimeout(() => {
-        setShowError(false);
-      }, 3000);
+      setTimeout(() => { setShowError(false);}, 3000);
+      return 
     }
+     router.replace('/')
   };
 
   return (
@@ -50,12 +51,12 @@ export const LoginPage = () => {
               <Typography variant='h1' component='h1'>
                 Login
               </Typography>
-                <Chip
-                  label='user / password incorrect'
-                  color='error'
-                  icon={<ErrorOutline />}
-                  sx={{display:showError?'flex':'none'}}
-                />
+              <Chip
+                label='user / password incorrect'
+                color='error'
+                icon={<ErrorOutline />}
+                sx={{ display: showError ? 'flex' : 'none' }}
+              />
             </Grid>
 
             <Grid item xs={12}>

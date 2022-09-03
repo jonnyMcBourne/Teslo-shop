@@ -12,8 +12,8 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
   switch (req.method) {
-    case 'POST':
-      console.log('POST-LOGIN');
+    case 'GET':
+      console.log('POST-VALIDATE-TOKEN');
       return checkJWT(req, res);
 
     default:
@@ -23,12 +23,6 @@ export default function handler(
 
 const checkJWT = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { token = '' } = req.cookies;
-  console.log('TOKEN', token);
-  if (token) {
-    res
-      .status(200)
-      .json({ token, user: { email: 'jp', name: 'hs', role: 'hola' } });
-  }
   let userId = '';
   try {
     userId = await jwt.isValidToken(token);
