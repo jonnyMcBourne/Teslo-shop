@@ -29,18 +29,18 @@ export const LoginPage = () => {
   } = useForm<formData>();
   const { loginUser, user } = useContext(AuthContext)
   const router = useRouter();
-
+  const previousPage = router.query?.p?.toString() ?? '/';
   const onLoginUser = async ({ email, password }: formData) => {
     setShowError(false);
-
     const isValidLogin = await loginUser(email, password);
     if (!isValidLogin) {
       setShowError(true);
       setTimeout(() => { setShowError(false);}, 3000);
       return 
     }
-     router.replace('/')
+     router.replace(previousPage)
   };
+
 
   return (
     <AuthLayout title='Login'>
@@ -58,7 +58,6 @@ export const LoginPage = () => {
                 sx={{ display: showError ? 'flex' : 'none' }}
               />
             </Grid>
-
             <Grid item xs={12}>
               <TextField
                 label='email'
@@ -100,7 +99,7 @@ export const LoginPage = () => {
               </Button>
             </Grid>
             <Grid item xs={12} display='flex' justifyContent='end'>
-              <Nextlink href='/auth/register' passHref>
+              <Nextlink href={`/auth/register?p=${previousPage}`} passHref>
                 <Link underline='always'>create a new account</Link>
               </Nextlink>
             </Grid>

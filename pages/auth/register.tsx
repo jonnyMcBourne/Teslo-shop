@@ -22,7 +22,7 @@ const RegisterPage:FC<Props> = () => {
     formState: { errors },
   } = useForm<formData>();
 
-  console.log('ERRORS',errors);
+  const previousPage = router.query?.p?.toString() ?? '/';
 
   const onRegister = async ({email,lastName,name,password}:formData)=>{
     const responseNewUser =await registerUser(email,name,lastName,password);
@@ -32,7 +32,7 @@ const RegisterPage:FC<Props> = () => {
       setTimeout(()=>{ setShowError(false)},3000);
       return
     }
-    router.push('/')
+    router.push(previousPage)
 
   }
   
@@ -77,7 +77,7 @@ const RegisterPage:FC<Props> = () => {
             </Button>
           </Grid>
           <Grid item xs={12} display="flex" justifyContent="end">
-            <Nextlink href="/auth/login" passHref>
+            <Nextlink href={`/auth/login?p=${previousPage}`} passHref>
               <Link underline="always">Already have an account?</Link>
             </Nextlink>
           </Grid>

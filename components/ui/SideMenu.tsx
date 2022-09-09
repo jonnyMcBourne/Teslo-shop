@@ -33,8 +33,8 @@ export const SideMenu = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
 
-  const { replace } = useRouter()
-
+  const { replace, asPath, query } = useRouter()
+  
   const navigateTo = (url: string) => {
     replace(url)
     toogleSideMenu()
@@ -122,7 +122,7 @@ export const SideMenu = () => {
               }}
             />
           </ListItem>
-          <ListItem button onClick={()=>{navigateTo('/auth/login')}} style={{ display: isLoggedIn? 'none':'flex'}} >
+          <ListItem button onClick={()=>{navigateTo(`/auth/login?p=${asPath}`)}} style={{ display: isLoggedIn? 'none':'flex'}} >
             <ListItemIcon>
               <VpnKeyOutlined />
             </ListItemIcon>

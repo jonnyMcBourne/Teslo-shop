@@ -13,7 +13,6 @@ export default function handler(
 ) {
   switch (req.method) {
     case 'POST':
-      console.log('POST-LOGIN');
       return registerUser(req, res);
 
     default:

@@ -13,7 +13,6 @@ export default function handler(
 ) {
   switch (req.method) {
     case 'GET':
-      console.log('GET-VALIDATE-TOKEN');
       return checkJWT(req, res);
 
     default:
