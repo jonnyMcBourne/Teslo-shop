@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 import { FC, PropsWithChildren, useEffect, useReducer, useState } from 'react';
 import { tesloApi } from '../../api';
 import { IUser } from '../../interfaces';
@@ -18,21 +19,20 @@ const AUTH_INITIAL_STATE: authState = {
 export const AuthProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 
     const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE)
-
+    const {reload}=useRouter()
     useEffect(()=>{
-        checkToken()
+        checkTokenAndUpdate()
     },[]);
 
-    const checkToken = async() =>{
-
+    const checkTokenAndUpdate = async() =>{
         if(!Cookies.get('token')){return};
-        
         try {
             const {data}= await tesloApi.get('/user/validate-token')
             const {user,token}= data;
             Cookies.set('token', token);
             dispatch({type:'[Auth] - logIn',payload:user})
         } catch (error) {
+            console.log('ERROR',error);
             Cookies.remove('token');
         }
     }
@@ -47,6 +47,12 @@ export const AuthProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
         } catch (error) {
             return false
         }
+    }
+
+    const logout = async()=>{
+        Cookies.remove('token');
+        Cookies.remove('cart');
+        reload()
     }
 
     const registerUser = async (email: string, name: string, lastName: string, password: string): Promise<{ hasError: boolean, message: string }> => {
@@ -68,7 +74,6 @@ export const AuthProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
                 hasError: true,
                 message: 'Error registring user, please try again'
             }
-
         }
     }
 
@@ -78,6 +83,7 @@ export const AuthProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
                 ...state,
                 loginUser,
                 registerUser,
+                logout
             }}>
             {children}
         </AuthContext.Provider>

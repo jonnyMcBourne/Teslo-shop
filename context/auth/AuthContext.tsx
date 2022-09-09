@@ -8,7 +8,8 @@ interface ContextProps{
     registerUser: (email: string, name: string, lastName: string, password: string) => Promise<{
         hasError: boolean;
         message: string;
-    }>
+    }>;
+    logout:()=>void;
 }
 
 export const AuthContext = createContext({} as ContextProps )

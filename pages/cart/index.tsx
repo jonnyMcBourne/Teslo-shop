@@ -1,19 +1,34 @@
-import { FC } from "react"
+import { FC, useContext, useEffect } from "react"
 import { useRouter } from "next/router";
 
 import { Box, Button, Card, CardContent, Divider, Grid, Typography } from "@mui/material"
 import CartList from "../../components/cart/CartList";
 import OrderSummary from "../../components/cart/OrderSummary";
 import ShopLayout from "../../components/layout/ShopLayout"
+import { CartContext } from "../../context";
 
 interface Props{
 
 }
 const Cart:FC<Props> = ({}) => {
-  const {push}=useRouter()
+
+  const { cart }= useContext(CartContext);
+  const {push} = useRouter();
+
+  useEffect(()=>{
+    if(cart.length <= 0){
+      push('/cart/empty')
+    }
+  },[cart.length])
+  
   const checkout = ()=>{
       push('/cart/summary')
   }
+
+  if(cart.length <= 0){
+    return(<></>)
+  }
+
   return (
     <ShopLayout title="Cart - 3" pageDescription="shopping cart">
       <Typography variant="h1" component="h1">

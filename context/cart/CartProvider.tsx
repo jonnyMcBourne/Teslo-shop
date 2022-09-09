@@ -30,6 +30,7 @@ export const CartProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
       cartIsReload.current = false
     }else{
       const initialCart = Cookie.get('cart') ? JSON.parse( Cookie.get('cart')! ) : [] ;
+      updateLocalStorage(initialCart)
       dispatch({type:'[cart] - LoadCart from cookies | storage',payload:initialCart})
     }
   },[]);

@@ -29,11 +29,11 @@ import { useRouter } from "next/router";
 
 export const SideMenu = () => {
   const { toogleSideMenu, isMenuOpen } = useContext(UiContext)
-  const { user, isLoggedIn } = useContext(AuthContext)
+  const { user, isLoggedIn, logout } = useContext(AuthContext)
   const [searchTerm, setSearchTerm] = useState('');
 
 
-  const { push, replace } = useRouter()
+  const { replace } = useRouter()
 
   const navigateTo = (url: string) => {
     replace(url)
@@ -122,13 +122,13 @@ export const SideMenu = () => {
               }}
             />
           </ListItem>
-          <ListItem button style={{ display: isLoggedIn? 'none':'flex'}} >
+          <ListItem button onClick={()=>{navigateTo('/auth/login')}} style={{ display: isLoggedIn? 'none':'flex'}} >
             <ListItemIcon>
               <VpnKeyOutlined />
             </ListItemIcon>
             <ListItemText primary={"Ingresar"} />
           </ListItem>
-          <ListItem button style={{ display: isLoggedIn? 'flex':'none'}} >
+          <ListItem button onClick={logout} style={{ display: isLoggedIn? 'flex':'none'}} >
             <ListItemIcon>
               <LoginOutlined />
             </ListItemIcon>
