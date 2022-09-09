@@ -6,9 +6,11 @@ import { CartContext, CartReducer, ICartProduct, IcartSummary } from './'
 export interface ICartState {
   cart: ICartProduct[]
   cartSummary: IcartSummary
+  cartIsLoaded:boolean;
 }
 export const cartInitialState: ICartState = {
   cart: [],
+  cartIsLoaded:false,
   cartSummary:{
     quantityOfIttems:0,
     subTotal:0,

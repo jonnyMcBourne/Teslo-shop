@@ -22,6 +22,7 @@ export type ISizes = undefined|'XS'|'S'|'M'|'L'|'XL'|'XXL'|'XXXL';
 
 interface ContextProps {
   cart: ICartProduct[];
+  cartIsLoaded:boolean;
   cartSummary:IcartSummary;
   addProductToCart:(product:ICartProduct)=>void
   updateCartQuantity:(product:ICartProduct,quantity:number)=>void

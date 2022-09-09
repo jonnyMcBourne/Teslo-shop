@@ -12,20 +12,21 @@ interface Props{
 }
 const Cart:FC<Props> = ({}) => {
 
-  const { cart }= useContext(CartContext);
-  const {push} = useRouter();
+  const { cart,cartIsLoaded }= useContext(CartContext);
+  const {push,replace} = useRouter();
 
   useEffect(()=>{
-    if(cart.length <= 0){
-      push('/cart/empty')
+    if(cart.length <= 0 && cartIsLoaded){
+      replace('/cart/empty')
     }
-  },[cart.length])
+  },[cart.length, cartIsLoaded])
   
   const checkout = ()=>{
       push('/cart/summary')
   }
 
-  if(cart.length <= 0){
+  if(cart.length <=0){
+    console.log('cartisloaded',cartIsLoaded);
     return(<></>)
   }
 
