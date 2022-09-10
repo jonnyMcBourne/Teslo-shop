@@ -1,5 +1,5 @@
-import Nextlink from 'next/link'
-
+import Nextlink from "next/link";
+import { useContext, useEffect } from "react";
 import {
   Box,
   Button,
@@ -13,8 +13,26 @@ import {
 import CartList from "../../components/cart/CartList";
 import OrderSummary from "../../components/cart/OrderSummary";
 import ShopLayout from "../../components/layout/ShopLayout";
+import { AuthContext, CartContext } from "../../context";
+import { useRouter } from "next/router";
 
 const SummaryPage = () => {
+  const{cartSummary}=useContext(CartContext)
+    
+  const { isLoggedIn }=useContext(AuthContext);
+  const router=useRouter()
+  useEffect(()=>{
+
+    if(cartSummary.quantityOfIttems <= 0){
+      console.log('quantity',cartSummary.quantityOfIttems);
+      router.replace('/cart/empty')
+    }
+  },[cartSummary.quantityOfIttems]);
+
+  if(cartSummary.quantityOfIttems === 0){
+    return(<></>)
+  }
+
   return (
     <ShopLayout title="Summary" pageDescription="summary of purshase">
       <Typography variant="h1" component="h1">
@@ -27,10 +45,14 @@ const SummaryPage = () => {
         <Grid item xs={12} sm={5}>
           <Card className="summary-card">
             <CardContent>
-              <Typography variant="h2"> Summary (3) Products</Typography>
+              <Typography variant="h2">
+                {" "}
+                Summary ({cartSummary.quantityOfIttems}){" "}
+                {cartSummary.quantityOfIttems > 1 ? "Products" : "Product"}
+              </Typography>
               <Divider sx={{ my: 1 }} />
               <Box display="flex" justifyContent="space-between">
-              <Typography variant="subtitle1">Adress</Typography>
+                <Typography variant="subtitle1">Adress</Typography>
                 <Nextlink href="/checkout/address" passHref>
                   <Link underline="always">Edit </Link>
                 </Nextlink>

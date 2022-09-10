@@ -54,7 +54,7 @@ export const NavBar:FC<{}> = () => {
           <NextLink href="/category/men" passHref>
             <Link>
               <Button
-                color={asPath.substring(10) === "men" ? "info" : "primary"}
+                color={asPath.substring(10) === "men" ? "primary":"info"}
               >
                 Men
               </Button>
@@ -63,7 +63,7 @@ export const NavBar:FC<{}> = () => {
           <NextLink href="/category/women" passHref>
             <Link>
               <Button
-                color={asPath.substring(10) === "women" ? "info" : "primary"}
+                color={asPath.substring(10) === "women" ? "primary":"info"}
               >
                 Women
               </Button>
@@ -72,7 +72,7 @@ export const NavBar:FC<{}> = () => {
           <NextLink href="/category/kid" passHref>
             <Link>
               <Button
-                color={asPath.substring(10) === "kid" ? "info" : "primary"}
+                color={asPath.substring(10) === "kid" ? "primary":"info"}
               >
                 Kids
               </Button>
@@ -127,7 +127,7 @@ export const NavBar:FC<{}> = () => {
             </IconButton>
           </Link>
         </NextLink>
-        <Button onClick={() => onCloseSideBar()}>Menu</Button>
+        <Button color={"info"} onClick={() => onCloseSideBar()}>Menu</Button>
       </Toolbar>
     </AppBar>
   );

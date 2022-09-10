@@ -1,7 +1,24 @@
 import { Box, Button, FormControl, Grid, Input, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
+import { useRouter } from "next/router";
+import { useContext, useEffect } from "react";
 import ShopLayout from "../../components/layout/ShopLayout"
+import { AuthContext, CartContext } from "../../context";
 
 const Adress = () => {
+  const { isLoggedIn }=useContext(AuthContext);
+  const {cartSummary} = useContext(CartContext)
+  const router=useRouter()
+  
+  useEffect(()=>{
+    if(!isLoggedIn){
+      router.push('/auth/login?p=/chechout/summary')
+    }
+    if(cartSummary.quantityOfIttems <= 0){
+      console.log('quantity',cartSummary.quantityOfIttems);
+      router.replace('/cart/empty')
+    }
+  },[cartSummary.quantityOfIttems,isLoggedIn])
+
   return (
     <ShopLayout title="Check out" pageDescription="check payment ">
       <Typography variant="h1" component="h1">
@@ -50,5 +67,46 @@ const Adress = () => {
     </ShopLayout>
   );
 }
+
+{
+  /**
+   * MAKING VALIDATION OF LOGGED IN BEFORE DISPLAY THE PAGE
+   * 
+    // You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+import { GetServerSideProps } from 'next'
+
+export const getServerSideProps: GetServerSideProps = async ({req}) => {
+  const { token='' } = req.cookies
+  let userId ='';
+  let isValidToken = false;
+  
+  try {
+    userId = await jwt.isValidToken(token);
+    isValidToken =true;
+
+  } catch (error) {
+    isValidToken = false;
+  }
+
+  if(!isValidToken){
+    return {
+      redirect:{
+        destination:'/auth/login?p=/checkout/address',
+        permanent:false
+      }
+  }
+}
+
+  return {
+    props: {
+      
+    }
+  }
+}
+   
+   */
+}
+
 
 export default Adress

@@ -30,6 +30,7 @@ export const LoginPage = () => {
   const { loginUser, user } = useContext(AuthContext)
   const router = useRouter();
   const previousPage = router.query?.p?.toString() ?? '/';
+  console.log('previous',previousPage);
   const onLoginUser = async ({ email, password }: formData) => {
     setShowError(false);
     const isValidLogin = await loginUser(email, password);
@@ -38,7 +39,7 @@ export const LoginPage = () => {
       setTimeout(() => { setShowError(false);}, 3000);
       return 
     }
-     router.replace(previousPage)
+     router.replace(`${previousPage}`)
   };
 
 

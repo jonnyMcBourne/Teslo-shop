@@ -7,27 +7,27 @@ import OrderSummary from "../../components/cart/OrderSummary";
 import ShopLayout from "../../components/layout/ShopLayout"
 import { CartContext } from "../../context";
 
-interface Props{
+interface Props {
 
 }
-const Cart:FC<Props> = ({}) => {
+const Cart: FC<Props> = ({ }) => {
 
-  const { cart,cartIsLoaded }= useContext(CartContext);
-  const {push,replace} = useRouter();
+  const { cart, cartIsLoaded } = useContext(CartContext);
+  const { push, replace } = useRouter();
 
-  useEffect(()=>{
-    if(cart.length <= 0 && cartIsLoaded){
+  useEffect(() => {
+    if (cart?.length <= 0 && cartIsLoaded) {
       replace('/cart/empty')
     }
-  },[cart.length, cartIsLoaded])
-  
-  const checkout = ()=>{
-      push('/cart/summary')
+  }, [cart?.length, cartIsLoaded])
+
+  const checkout = () => {
+    push('/checkout/summary')
   }
 
-  if(cart.length <=0){
-    console.log('cartisloaded',cartIsLoaded);
-    return(<></>)
+  if (cart.length <= 0) {
+    console.log('cartisloaded', cartIsLoaded);
+    return (<></>)
   }
 
   return (
@@ -61,6 +61,6 @@ const Cart:FC<Props> = ({}) => {
       </Grid>
     </ShopLayout>
   );
-} 
+}
 
 export default Cart
