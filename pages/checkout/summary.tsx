@@ -17,21 +17,7 @@ import { AuthContext, CartContext } from "../../context";
 import { useRouter } from "next/router";
 
 const SummaryPage = () => {
-  const{cartSummary}=useContext(CartContext)
-    
-  const { isLoggedIn }=useContext(AuthContext);
-  const router=useRouter()
-  useEffect(()=>{
-
-    if(cartSummary.quantityOfIttems <= 0){
-      console.log('quantity',cartSummary.quantityOfIttems);
-      router.replace('/cart/empty')
-    }
-  },[cartSummary.quantityOfIttems]);
-
-  if(cartSummary.quantityOfIttems === 0){
-    return(<></>)
-  }
+  const{cartSummary}=useContext(CartContext);
 
   return (
     <ShopLayout title="Summary" pageDescription="summary of purshase">

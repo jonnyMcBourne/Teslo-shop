@@ -5,11 +5,17 @@ import { NextCookies } from 'next/dist/server/web/spec-extension/cookies'
 import * as jose from 'jose';
 
 export async function middleware(request: NextRequest, ev: NextFetchEvent) {
-    
+
     const  cookies = request.cookies 
     const previousPage = request.nextUrl.pathname;
     const token = cookies.get('token')
+    const cart = JSON.parse(cookies.get('cart')||'')
+
     let isValidToken = false;
+
+    if(cart?.length === 0){
+        return NextResponse.redirect(new URL('/cart/empty',request.url))
+    }
     if(!token){
         return NextResponse.redirect( new URL(`/auth/login?p=${previousPage}`,request.url) );
     }   
