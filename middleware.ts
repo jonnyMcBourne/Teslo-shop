@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest, ev: NextFetchEvent) {
     const  cookies = request.cookies 
     const previousPage = request.nextUrl.pathname;
     const token = cookies.get('token')
-    const cart = JSON.parse(cookies.get('cart')||'')
+    const cart = JSON.parse(cookies.get('cart')||'[]')
 
     let isValidToken = false;
 
